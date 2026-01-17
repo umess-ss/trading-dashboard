@@ -15,6 +15,18 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 1s
+      retries: 5
+    volumes:
+      - redis_data:/data
 
   # backend
   backend:
@@ -22,7 +34,9 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: trading_backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend:/app
     ports:
@@ -33,6 +47,7 @@ services:
       - DB_USER=trading_user
       - DB_PASS=trading_pass
       - DB_HOST=db
+      - REDIS_URL=redis://redis:6379/0
 
     depends_on:
       db:
@@ -43,7 +58,7 @@ services:
   frontend:
     build: 
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: trading_frontend
     ports:
       - "5173:5173"
@@ -51,6 +66,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     stdin_open: true
+    tty: true
     environment:
       - VITE_API_URL=http://localhost:8000/api
     depends_on:
@@ -58,3 +74,4 @@ services:
     
 volumes:
   postgres_data:
+  redis_data:
