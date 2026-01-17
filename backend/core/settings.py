@@ -146,3 +146,13 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channel_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts" : [os.getenv('REDIS_URL', 'redis://redis:6379/0')],
+        }
+    }
+}

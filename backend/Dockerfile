@@ -11,15 +11,14 @@ WORKDIR /app
 
 # install system dependencies
 RUN apt-get update && apt-get install -y \
-    libpq-dev \
-    gcc \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # install dependencies
-COPY requirements.txt /app/
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app/
+COPY . .
 
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
