@@ -6,6 +6,7 @@ djangorestframework-simplejwt==5.3.*
 # Database & Production
 psycopg2-binary==2.9.11
 gunicorn==22.0.*
+dj-database-url>=2.3.0
 
 # Real-time (WebSockets)
 channels==4.1.*
@@ -15,3 +16,7 @@ channels-redis==4.2.*
 # Security
 django-cors-headers==4.4.*
 django-environ==0.11.*
+
+# Utilities
+python-dotenv>=1.0.1
+requests>=2.32.0
