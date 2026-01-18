@@ -1,5 +1,6 @@
 .env
 postgres_data/
+node_modules/
 
 backend/venv/
 backend/__pycache__/
