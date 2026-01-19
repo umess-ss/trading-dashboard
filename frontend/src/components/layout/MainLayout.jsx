@@ -1,5 +1,6 @@
 import OrderBook from "../dashboard/OrderBook";
 import TradingChart from "../dashboard/TradingChart";
+import TradingForm from "../dashboard/TradingForm";
 
 export default function MainLayout() {
     return(
@@ -36,6 +37,7 @@ export default function MainLayout() {
                 <div className="col-span-3 flex flex-col gap-1">
                     <div className="flex-1 bg-[#161a1e] rounded-sm">
                         {/* Buy sell form goes here */}
+                        <TradingForm />
                         <div className="p-4 text-green-400">Trade Execution</div>
                     </div>
                 </div>
