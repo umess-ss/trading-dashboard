@@ -1,22 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import User
+from market.models import Asset
 
 # Create your models here.
 class Order(models.Model):
-    ORDER_TYPE = (
+    SIDE_CHOICES = (
         ('BUY', 'Buy'),
         ('SELL', 'Sell')
     )
-    STATUS_TYPE = (
-        ('PENDING','Pending'),
-        ('COMPLETED', 'Completed'),
+    STATUS_CHOICES = (
+        ('OPEN','Open'),
+        ('FILLED', 'Filled'),
         ('CANCELLED', 'Cancelled'),
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    asset = models.ForeignKey('market.Asset',on_delete=models.PROTECT)
-    order_type = models.CharField(max_length=10, choices=ORDER_TYPE)
+    asset = models.ForeignKey(Asset ,on_delete=models.CASCADE)
+    side = models.CharField(max_length=10, choices=SIDE_CHOICES)
     price = models.DecimalField(max_digits=20, decimal_places=8)
     quantity = models.DecimalField(max_digits=20, decimal_places=8)
-    status = models.CharField(max_length=20, choices=STATUS_TYPE, default='PENDING')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='OPEN')
     timestamp = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"{self.side} {self.quantity} {self.asset.symbol}"
