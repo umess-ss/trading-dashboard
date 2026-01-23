@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 
 class AssetViewSet(viewsets.ModelViewSet):
-    query = Asset.objects.filter(is_tradable=True)
+    queryset = Asset.objects.filter(is_tradable=True)
     serializer_class = AssetSerializers
 
     @action(detail=True,methods=['get'])
