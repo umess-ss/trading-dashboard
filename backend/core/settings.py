@@ -135,10 +135,11 @@ STATIC_URL = 'static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',            #for frontend react
+        'rest_framework.authentication.SessionAuthentication',                  #for browser
     ),
     'DEFAULT_PERMISSION_CLASSES':[
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',               #if not authenticated display 401
     ]
 }
 
