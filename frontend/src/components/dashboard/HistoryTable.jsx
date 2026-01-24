@@ -7,7 +7,7 @@ const HistoryTable = () =>{
     useEffect(()=>{
         api.get('orders/')
         .then(res=>setOrders(res.data))
-        .catch(err=>console.error(err));
+        .catch(err=>console.error("couldnot fetch orders",err));
     },[]);
 
 

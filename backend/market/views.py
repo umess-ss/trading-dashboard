@@ -3,10 +3,12 @@ from .models import Asset
 from .serializers import AssetSerializers
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
 
 class AssetViewSet(viewsets.ModelViewSet):
     queryset = Asset.objects.filter(is_tradable=True)
     serializer_class = AssetSerializers
+    permission_classes=[AllowAny]
 
     @action(detail=True,methods=['get'])
     def candles(self,request,pk=None):
