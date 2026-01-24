@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useRef} from "react";
 
 import { createChart, ColorType, CandlestickSeries } from "lightweight-charts";
+import api from "../../api";
 
-const TradingChart = () =>{
+const TradingChart = ({assetId = 1}) =>{
     const chartContainerRef = useRef(null);
     const chartRef = useRef(null);
 
@@ -32,14 +33,26 @@ const TradingChart = () =>{
             upColor: '#26a68a', downColor: '#ef5350',
             borderVisible: false, wickUpColor: '#26a69a', wickDownColor: '#ef5350',
         });
+
+
+        api.get(`assets/${assetId}/candles/`)
+            .then(response=>{
+                const candles = response.data.map((c)=>({
+                    time:{
+                        year : Number(c.time.slice(0,4)),
+                        month: Number(c.time.slice(5,7)),
+                        day: Number(c.time.slice(8,10))
+                    },
+                    open: c.open,
+                    high: c.high,
+                    low: c.low,
+                    close: c.close,
+                }));
+                candlestickSeries.setData(candles);
+            }).catch(error=>{
+                console.error("Error Fetching candle data",error);
+            });
         
-        const mockData = [
-             { time: 1736476800, open: 42000, high: 42500, low: 41800, close: 42300 }, // 2025-01-10
-      { time: 1736563200, open: 42300, high: 42800, low: 42200, close: 42600 }, // 2025-01-11
-      { time: 1736649600, open: 42600, high: 43000, low: 42100, close: 42200 }, // 2025-01-12
-      { time: 1736736000, open: 42200, high: 42400, low: 41500, close: 41900 },     ];
-    
-      candlestickSeries.setData(mockData);
       chartRef.current = chart;
 
     const handleResize = () =>{
@@ -54,7 +67,7 @@ const TradingChart = () =>{
         window.removeEventListener("resize", handleResize);
         chart.remove();
     };
-},[]);
+},[assetId]);   // 3. Re-run effect if assetId changes
 
 
     return(
