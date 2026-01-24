@@ -23,10 +23,16 @@ function App() {
     );
   }
 
+  const handleLogout = () =>{
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    setIsAuthenticated(false);
+  }
+
   return (
     <div className="min-h-screen bg-[#0b0e11]">
       {isAuthenticated ? (
-        <MainLayout />
+        <MainLayout onLogout={handleLogout}/>
       ) : (
         <Login onLoginSuccess={() => setIsAuthenticated(true)} />
       )}

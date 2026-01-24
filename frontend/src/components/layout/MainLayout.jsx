@@ -2,7 +2,7 @@ import OrderBook from "../dashboard/OrderBook";
 import TradingChart from "../dashboard/TradingChart";
 import TradingForm from "../dashboard/TradingForm";
 
-export default function MainLayout() {
+export default function MainLayout({onLogout}) {
     return(
         <div className="h-screen w-full bg-[#0b0e11] text-white flex flex-col overflow-hidden">
             {/* top navigation bar */}
@@ -17,11 +17,8 @@ export default function MainLayout() {
                 <nav className="text-sm text-gray-400 flex gap-4 items-center">
                     <span>Wallet</span>
                     <span>Orders</span>
-                    <button onClick={()=>{
-                        localStorage.getItem("access_token");
-                        localStorage.getItem("refresh_token");
-                        window.location.reload();
-                    }}   className="ml-2 px-2 py-1 bg-red-900/30 text-red-500 rounded hover:bg-red-900/50 transition-colors">
+                    <button onClick={onLogout} 
+                    className="ml-2 px-2 py-1 bg-red-900/30 text-red-500 rounded hover:bg-red-900/50 transition-colors">
                         Logout
                     </button>
                 </nav>
