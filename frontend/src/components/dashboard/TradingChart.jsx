@@ -37,18 +37,11 @@ const TradingChart = ({assetId = 1}) =>{
 
         api.get(`assets/${assetId}/candles/`)
             .then(response=>{
-                const candles = response.data.map((c)=>({
-                    time:{
-                        year : Number(c.time.slice(0,4)),
-                        month: Number(c.time.slice(5,7)),
-                        day: Number(c.time.slice(8,10))
-                    },
-                    open: c.open,
-                    high: c.high,
-                    low: c.low,
-                    close: c.close,
-                }));
-                candlestickSeries.setData(candles);
+                const candles = response.data;
+
+                if (candlestickSeries){
+                    candlestickSeries.setData(candles);
+                }
             }).catch(error=>{
                 console.error("Error Fetching candle data",error);
             });

@@ -1,19 +1,33 @@
-from rest_framework import viewsets
-from .models import Asset
-from .serializers import AssetSerializers
+import requests
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny
+from rest_framework import viewsets
+
 
 class AssetViewSet(viewsets.ModelViewSet):
-    queryset = Asset.objects.filter(is_tradable=True)
-    serializer_class = AssetSerializers
-    permission_classes=[AllowAny]
-
-    @action(detail=True,methods=['get'])
+    @action(detail=True, methods=['get'])
     def candles(self,request,pk=None):
-        data = [
-            {"time": "2026-01-20", "open": 105, "high": 110, "low": 100, "close": 108},
-            {"time": "2026-01-21", "open": 108, "high": 115, "low": 107, "close": 112},
-        ]
-        return Response(data)
+        symbol = "BTCUSDT"
+        interval = "1d"   #1 day candle
+        limit = 100      #100 candles
+
+        url = f"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&limit={limit}"
+
+        try:
+            response = requests.get(url)
+            data = response.json()
+
+            formatted_data = []
+            for item in data:
+                formatted_data.append({
+                    "time":item[0]//1000,                #convert ms to s
+                    "open": float(item[1]),
+                    "high": float(item[2]),
+                    "low": float(item[3]),
+                    "close": float(item[4]),
+                })
+
+            return Response(formatted_data)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
