@@ -10,23 +10,27 @@ class AssetViewSet(viewsets.ModelViewSet):
     queryset = Asset.objects.all()
     serializer_class = AssetSerializers
 
-    
+
     @action(detail=True, methods=['get'])
     def candles(self,request,pk=None):
-        symbol = "BTCUSDT"
+        # symbol = "BTCUSDT"
+        symbol = request.query_params.get('symbol', 'BTCUSDT').upper()
         interval = "1m"   #1 min candle
         limit = 1000      #1000 candles
 
-        url = f"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&limit={limit}"
 
         try:
-            response = requests.get(url)
+            url = f"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&limit={limit}"
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+
+
             data = response.json()
 
             formatted_data = []
             for item in data:
                 formatted_data.append({
-                    "time":item[0]//1000,                #convert ms to s
+                    "time": int(item[0]/1000),                #convert ms to s
                     "open": float(item[1]),
                     "high": float(item[2]),
                     "low": float(item[3]),

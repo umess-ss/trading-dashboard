@@ -3,11 +3,22 @@
     import { createChart, ColorType, CandlestickSeries } from "lightweight-charts";
     import api from "../../api";
 
-    const TradingChart = ({assetId = 1}) =>{
+    const TradingChart = () =>{
+
+        const [symbol, setSymbol] = useState('BTCUSDT');
         const [loading, setLoading] = useState(true);
         const chartContainerRef = useRef(null);
         const chartRef = useRef(null);
         const seriesRef = useRef(null);
+
+
+        const cryptos = [
+            {name: 'Bitcoin', id: 'BTCUSDT'},
+            {name: 'Ethereum', id: 'ETHUSDT'},
+            {name: 'Solana', id: 'SOLUSDT'},
+            {name: 'Binance Coin', id: 'BNBUSDT'},
+            {name: 'Cardano', id: 'ADAUSDT'},
+        ];
 
 
         useEffect(()=>{
@@ -57,7 +68,7 @@
                 const fetchHistory = async () => {
                     try {
                         setLoading(true);
-                        const response = await api.get(`assets/${assetId}/candles/`);
+                        const response = await api.get(`assets/1/candles/?symbol=${symbol}`);
                         if (response.data && chartRef.current && seriesRef.current) {
                             const sortedData = response.data.sort((a, b) => a.time - b.time);
                             
@@ -69,7 +80,7 @@
                             const timeScale = chartRef.current.timeScale();
                             
                             // This forces the chart to jump to the latest history immediately
-                            timeScale.fitContent(); 
+                            timeScale.scrollToRealTime(); 
                             
                             // Optional: Zoom in slightly so candles aren't tiny
                             const lastIndex = sortedData.length;
@@ -86,7 +97,8 @@
                 fetchHistory();
 
                 // 3. Setup Websocket
-                const socket = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@kline_1m');
+                const socket = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_1m`);
+                
                 socket.onmessage = (event) =>{
                     const message = JSON.parse(event.data);
                     const candle = message.k;    //k contains the candles data
@@ -114,25 +126,52 @@
         window.addEventListener("resize", handleResize);
         return () =>{
             window.removeEventListener("resize", handleResize);
-            socket.close();
+
+            if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)){
+                socket.close();
+            }
+
+
             if(chartRef.current){
                 chartRef.current.remove();
                 chartRef.current = null;
             }
         };
-    },[assetId]);   // 3. Re-run effect if assetId changes
+    },[symbol]);   // 3. Re-run effect if assetId changes
 
 
 return (
-    <div className="relative w-full h-[400px]">
-        {loading && (
-            <div className="absolute inset-0 flex items-center justify-center z-10 bg-[#161a1e] text-white">
-                Loading History...
+<div className="w-full max-w-5xl mx-auto p-4">
+            {/* Category Switcher Buttons */}
+            <div className="flex flex-wrap gap-2 mb-4">
+                {cryptos.map((coin) => (
+                    <button
+                        key={coin.id}
+                        onClick={() => setSymbol(coin.id)}
+                        className={`px-4 py-2 rounded-md transition-colors ${
+                            symbol === coin.id 
+                            ? "bg-emerald-500 text-white" 
+                            : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                        }`}
+                    >
+                        {coin.name}
+                    </button>
+                ))}
             </div>
-        )}
-        <div ref={chartContainerRef} className="w-full h-full" />
-    </div>
-);
+
+            {/* Chart Container */}
+            <div className="relative w-full h-[400px] bg-[#161a1e] rounded-lg border border-gray-800 overflow-hidden">
+                {loading && (
+                    <div className="absolute inset-0 flex items-center justify-center z-10 bg-[#161a1e]/80 text-white">
+                        <div className="flex flex-col items-center gap-2">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+                            <span>Loading {symbol}...</span>
+                        </div>
+                    </div>
+                )}
+                <div ref={chartContainerRef} className="w-full h-full" />
+            </div>
+        </div>);
     }
 
     export default TradingChart;
