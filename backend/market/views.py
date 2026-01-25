@@ -2,9 +2,15 @@ import requests
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import viewsets
+from .models import Asset
+from .serializers import AssetSerializers
 
 
 class AssetViewSet(viewsets.ModelViewSet):
+    queryset = Asset.objects.all()
+    serializer_class = AssetSerializers
+
+    
     @action(detail=True, methods=['get'])
     def candles(self,request,pk=None):
         symbol = "BTCUSDT"
