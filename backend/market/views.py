@@ -8,8 +8,8 @@ class AssetViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'])
     def candles(self,request,pk=None):
         symbol = "BTCUSDT"
-        interval = "1d"   #1 day candle
-        limit = 100      #100 candles
+        interval = "1m"   #1 min candle
+        limit = 1000      #1000 candles
 
         url = f"https://api.binance.com/api/v3/klines?symbol={symbol}&interval={interval}&limit={limit}"
 
