@@ -14,11 +14,11 @@ const TradingForm = () =>{
             {/* Buy sell toggle */}
             <div className="flex p-1 bg-gray-900 rounded-md">
                 <button onClick={()=> setSide('buy')} 
-                className={`flex-1 py-2 text-sm font-bold rounded ${isBuy} ? 'bg-tradeGreen text-white' : 'text-gray-400 hover:text-white' transition-colors`}>
+                className={`flex-1 py-2 text-sm font-bold rounded ${isBuy ? 'bg-tradeGreen text-white' : 'text-gray-400 hover:text-white'} transition-colors`}>
                     Buy
                 </button>
                 <button onClick={()=> setSide('sell')} 
-                className={`flex-1 py-2 text-sm font-bold rounded ${!isBuy} ? 'bg-tradeRed text-white' : 'text-gray-400 hover:text-white' transition-colors`}>
+                className={`flex-1 py-2 text-sm font-bold rounded ${!isBuy ? 'bg-tradeRed text-white' : 'text-gray-400 hover:text-white'} transition-colors`}>
                     Sell
                 </button>
             </div>

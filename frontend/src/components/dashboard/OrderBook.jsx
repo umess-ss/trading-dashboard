@@ -45,7 +45,7 @@ const OrderBook = () =>{
             <div className="flex-1 overflow-hidden">
                 {bids.map((order,i)=>(
                     <div key={i} className="relative grid grid-cols-3 px-2 py-0.5 hover:bg-gray-800">
-                        <div className="absolute right-0 top-0 h-full bg-teadeGreen/10" 
+                        <div className="absolute right-0 top-0 h-full bg-tradeGreen/10" 
                         style={{width: `${(order.total /2) *100}%`}}/>
                         <span className="text-tradeGreen z-10">{order.price.toLocaleString()}</span>
                         <span className="text-right z-10">{order.amount.toFixed(4)}</span>
