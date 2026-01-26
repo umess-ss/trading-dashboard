@@ -168,3 +168,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+LOGIN_REDIRECT_URL = '/api/profile/me/'
+LOGOUT_REDIRECT_URL = '/api-auth/login/'
