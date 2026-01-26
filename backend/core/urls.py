@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from market.views import AssetViewSet
-from accounts.views import WalletViewSet
+from accounts.views import WalletViewSet, UserProfileViewSet
 from orders.views import OrderViewSet
 
 
@@ -31,6 +31,7 @@ router = DefaultRouter()
 router.register(r'assets',AssetViewSet,basename='asset')
 router.register(r'wallet',WalletViewSet, basename='wallet')
 router.register(r'orders', OrderViewSet,basename='order')
+router.register(r'profile', UserProfileViewSet, basename='profile')
 
 
 
