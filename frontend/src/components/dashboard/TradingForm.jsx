@@ -74,6 +74,10 @@ const TradingForm = ({assetId=1, assetSymbol="BTC"}) =>{
             return;
         }
 
+        const currentAssetBalance = !isBuy ?
+        parseFloat(userProfile[`${assetSymbol.toLowerCase()}_balance`] || 0) : 0;
+
+
         if(!isBuy && parseFloat(amount) > currentAssetBalance){
             alert(`Insufficient ${assetSymbol} Asset`);
             return;
@@ -94,11 +98,17 @@ const TradingForm = ({assetId=1, assetSymbol="BTC"}) =>{
                     Authorization: `Bearer ${token}`,
                 }
             });
-            alert("Order"+ response.data.status);
+            if (response.data.status === 'FILLED'){
+                alert(`${side.toUpperCase()}  ${amountNum.toFixed(6)} ${assetSymbol} FILLED!!!`);
+            }
 
 
             // Refresh balance after successful trade
-            const updatedProfile = await axios.get("http://localhost:8000/api/profile/me/");
+            const updatedProfile = await axios.get("http://localhost:8000/api/profile/me/",  {
+                headers: {
+                Authorization: `Bearer ${token}`,  
+                },
+            });
             setUserProfile(updatedProfile.data);
             
         }catch(error){
