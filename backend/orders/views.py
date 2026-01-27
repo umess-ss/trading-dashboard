@@ -22,7 +22,9 @@ class OrderViewSet(viewsets.ModelViewSet):
             # 2. Logic for filling the order
             profile, _ = UserProfile.objects.get_or_create(user=self.request.user)
             cost = Decimal(str(order.price)) * Decimal(str(order.quantity))
-            asset_field = f"{order.asset.symbol.lower()}_balance"
+
+            asset_symbol = order.asset.symbol.replace('USDT', '').lower()
+            asset_field = f"{asset_symbol}_balance"
 
 
             try:
