@@ -87,7 +87,6 @@ const TradingForm = ({assetId=1, assetSymbol="BTC"}) =>{
                 asset: assetId,
                 side: side.toUpperCase(),
                 price: parseFloat(price),
-                amount: parseFloat(amount),
                 quantity: amountNum
             },
             {

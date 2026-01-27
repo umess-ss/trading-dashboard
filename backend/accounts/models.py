@@ -13,7 +13,7 @@ class Wallet(models.Model):
     
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
 
     usdt_balance = models.DecimalField(max_digits=20, decimal_places=2, default=10000)

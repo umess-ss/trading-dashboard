@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Order
+from accounts.models import UserProfile
 
 class OrderSerializer(serializers.ModelSerializer):
     asset_symbol = serializers.ReadOnlyField(source='asset.symbol')
@@ -10,7 +11,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def validate(self,data):
         user = self.context['request'].user
-        profile = user.profile
+        profile, _ = UserProfile.objects.get_or_create(user=user)
 
 
         total_cost = data['price'] * data['quantity']
