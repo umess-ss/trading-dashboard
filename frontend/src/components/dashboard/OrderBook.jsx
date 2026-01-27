@@ -24,7 +24,7 @@ const OrderBook = () =>{
         <div className="flex-1 overflow-hidden flex flex-col-reverse">
             {asks.map((order,i)=>(
                 <div key={i} className="relative grid grid-cols-3 py-0.5 hover:bg-gray-800 group">
-                    <div className="absolute right-0 top-0 h-full bg-red-900.20" />
+                    <div className="absolute right-0 top-0 h-full bg-red-900/20" />
                     <span className="text-tradeRed z-10">{order.price.toLocaleString()}</span>
                     <span className="text-right z-10">{order.amount.toFixed(4)}</span>
                     <span className="text-right z-10 text-gray-400">{order.total.toFixed(2)}</span>

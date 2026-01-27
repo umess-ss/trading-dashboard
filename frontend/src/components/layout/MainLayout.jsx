@@ -28,7 +28,6 @@ export default function MainLayout({onLogout}) {
             <main className="flex-1 grid grid-cols-12 gap-1 p-1 overflow-hidden">
                 <div className="col-span-9 flex flex-col gap-1">
                     <div className="flex-1 bg-[#161a1e] rounded-sm">
-                        <div className="p-4 text-gray-500">Main Chart Area</div>
                         <TradingChart />
                     </div>
                     <div className="h-1/3 bg-[#161a1e] rounded-sm">
